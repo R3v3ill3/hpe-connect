@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { useEffect } from 'react';
+import { Image, View } from 'react-native';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { Chrome as Home, BookOpen, User, Users, Award } from 'lucide-react-native';
 
@@ -52,13 +53,24 @@ export default function TabLayout() {
           fontFamily: 'Inter-Bold',
         },
         headerTintColor: 'white',
+        headerTitle: () => (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image
+              source={require('../../assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png')}
+              style={{ width: 30, height: 30, marginRight: 8 }}
+              resizeMode="contain"
+            />
+            <Text style={{ color: 'white', fontSize: 18, fontFamily: 'Inter-Bold' }}>
+              WA HPE Connect
+            </Text>
+          </View>
+        ),
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Dashboard',
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-          headerTitle: 'WA HPE Connect',
         }}
       />
       <Tabs.Screen
@@ -66,7 +78,6 @@ export default function TabLayout() {
         options={{
           title: 'Lessons',
           tabBarIcon: ({ color, size }) => <BookOpen color={color} size={size} />,
-          headerTitle: 'Lesson Plans',
         }}
       />
       <Tabs.Screen
@@ -74,7 +85,6 @@ export default function TabLayout() {
         options={{
           title: 'Students',
           tabBarIcon: ({ color, size }) => <Users color={color} size={size} />,
-          headerTitle: 'My Students',
         }}
       />
       <Tabs.Screen
@@ -82,7 +92,6 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
-          headerTitle: 'Teacher Profile',
         }}
       />
       <Tabs.Screen
@@ -90,7 +99,6 @@ export default function TabLayout() {
         options={{
           title: 'Student Mode',
           tabBarIcon: ({ color, size }) => <Award color={color} size={size} />,
-          headerTitle: 'Student Dashboard',
         }}
       />
     </Tabs>

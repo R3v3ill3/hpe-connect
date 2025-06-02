@@ -10,7 +10,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: 'wa-hpe-connect',
   userInterfaceStyle: 'automatic',
   splash: {
-    image: './assets/images/splash.png',
+    image: './assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png',
     resizeMode: 'contain',
     backgroundColor: '#2563EB'
   },
@@ -26,13 +26,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/images/adaptive-icon.png',
+      foregroundImage: './assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png',
       backgroundColor: '#2563EB'
     },
     package: 'com.wahpeconnect'
   },
   web: {
-    favicon: './assets/images/favicon.png'
+    favicon: './assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png'
   },
   extra: {
     supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
