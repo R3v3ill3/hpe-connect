@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import { useEffect } from 'react';
-import { Image, View } from 'react-native';
+import { Image, View, Text } from 'react-native';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { Chrome as Home, BookOpen, User, Users, Award } from 'lucide-react-native';
 
