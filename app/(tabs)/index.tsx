@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Calendar, Clock, Users, ChartBar as BarChart2, CircleAlert as AlertCircle, CloudOff } from 'lucide-react-native';
 import DashboardStats from '../../components/dashboard/DashboardStats';
@@ -277,14 +277,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   offlineButton: {
-    backgroundColor: isOffline => isOffline ? '#2563EB' : '#E2E8F0',
+    backgroundColor: '#E2E8F0',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 6,
     marginBottom: 8,
   },
   offlineButtonText: {
-    color: isOffline => isOffline ? 'white' : '#64748B',
+    color: '#64748B',
     fontWeight: '500',
   },
   offlineInfoText: {
