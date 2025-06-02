@@ -5,10 +5,30 @@ import { Calendar, Clock, Users, ChartBar as BarChart2, CircleAlert as AlertCirc
 import DashboardStats from '../../components/dashboard/DashboardStats';
 import RecentActivity from '../../components/dashboard/RecentActivity';
 import UpcomingLessons from '../../components/dashboard/UpcomingLessons';
+import { useDashboardStats } from '@/hooks/useDashboardStats';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function TeacherDashboard() {
   const router = useRouter();
   const [isOffline, setIsOffline] = useState(false);
+  const { stats, loading, error } = useDashboardStats();
+  const { profile } = useProfile();
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading dashboard: {error}</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -22,12 +42,14 @@ export default function TeacherDashboard() {
       <View style={styles.welcomeSection}>
         <View style={styles.welcomeHeader}>
           <Image 
-            source={{ uri: 'https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} 
+            source={{ uri: profile?.avatar_url || 'https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }} 
             style={styles.teacherAvatar}
           />
           <View style={styles.welcomeText}>
-            <Text style={styles.welcomeTitle}>Welcome, Ms. Johnson</Text>
-            <Text style={styles.welcomeSubtitle}>Year 2 Health & PE Teacher</Text>
+            <Text style={styles.welcomeTitle}>Welcome, {profile?.full_name || 'Teacher'}</Text>
+            <Text style={styles.welcomeSubtitle}>
+              {profile?.role === 'teacher' ? 'Teacher' : 'Student'} - {profile?.school || 'Update your school'}
+            </Text>
           </View>
         </View>
         
@@ -58,7 +80,7 @@ export default function TeacherDashboard() {
         </View>
       </View>
       
-      <DashboardStats />
+      <DashboardStats stats={stats} />
       
       <View style={styles.reminderCard}>
         <View style={styles.reminderHeader}>
@@ -80,7 +102,7 @@ export default function TeacherDashboard() {
             <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
-        <UpcomingLessons />
+        <UpcomingLessons lessons={stats.upcomingLessons} />
       </View>
       
       <View style={styles.sectionContainer}>
@@ -88,7 +110,7 @@ export default function TeacherDashboard() {
           <Text style={styles.sectionTitle}>Recent Activity</Text>
           <BarChart2 size={20} color="#64748B" />
         </View>
-        <RecentActivity />
+        <RecentActivity activities={stats.recentActivity} />
       </View>
       
       <View style={styles.offlineNotice}>
@@ -112,6 +134,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 20,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
   },
   offlineWarning: {
     backgroundColor: '#F97316',

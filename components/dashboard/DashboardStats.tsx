@@ -1,8 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { CircleUser as UserCircle, Book, Clock, Award, ArrowUpRight, ArrowDownRight } from 'lucide-react-native';
+import type { DashboardStats } from '@/hooks/useDashboardStats';
 
-export default function DashboardStats() {
+type DashboardStatsProps = {
+  stats: DashboardStats;
+};
+
+export default function DashboardStats({ stats }: DashboardStatsProps) {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -14,7 +19,7 @@ export default function DashboardStats() {
               <Text style={styles.changeText}>+2</Text>
             </View>
           </View>
-          <Text style={styles.statValue}>28</Text>
+          <Text style={styles.statValue}>{stats.activeStudents}</Text>
           <Text style={styles.statLabel}>Active Students</Text>
         </View>
         
@@ -26,7 +31,7 @@ export default function DashboardStats() {
               <Text style={styles.changeText}>+5</Text>
             </View>
           </View>
-          <Text style={styles.statValue}>42</Text>
+          <Text style={styles.statValue}>{stats.lessonPlans}</Text>
           <Text style={styles.statLabel}>Lesson Plans</Text>
         </View>
       </View>
@@ -40,7 +45,7 @@ export default function DashboardStats() {
               <Text style={[styles.changeText, styles.decreaseText]}>-3h</Text>
             </View>
           </View>
-          <Text style={styles.statValue}>14h</Text>
+          <Text style={styles.statValue}>{stats.timeSaved}h</Text>
           <Text style={styles.statLabel}>Time Saved</Text>
         </View>
         
@@ -52,7 +57,7 @@ export default function DashboardStats() {
               <Text style={styles.changeText}>+12</Text>
             </View>
           </View>
-          <Text style={styles.statValue}>156</Text>
+          <Text style={styles.statValue}>{stats.badgesEarned}</Text>
           <Text style={styles.statLabel}>Badges Earned</Text>
         </View>
       </View>
