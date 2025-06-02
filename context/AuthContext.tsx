@@ -19,13 +19,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setIsLoading(false);
     });
 
-    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -43,26 +41,51 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, role: 'teacher' | 'student') => {
-    const { error: signUpError, data } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (signUpError) throw signUpError;
-
-    // Create profile after successful signup
-    if (data.user) {
-      const { error: profileError } = await supabase
+    try {
+      // First check if user exists
+      const { data: existingUser } = await supabase
         .from('profiles')
-        .insert([
-          {
-            id: data.user.id,
-            email,
-            role,
-          },
-        ]);
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
 
-      if (profileError) throw profileError;
+      if (existingUser) {
+        throw new Error('user_already_exists');
+      }
+
+      // Create auth user
+      const { error: signUpError, data } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (signUpError) throw signUpError;
+
+      // Create profile after successful signup
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            {
+              id: data.user.id,
+              email,
+              role,
+            },
+          ]);
+
+        if (profileError) {
+          // If profile creation fails, clean up auth user
+          await supabase.auth.admin.deleteUser(data.user.id);
+          throw profileError;
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'user_already_exists') {
+          throw new Error('This email is already registered');
+        }
+      }
+      throw error;
     }
   };
 
