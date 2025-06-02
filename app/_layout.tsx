@@ -4,24 +4,18 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { AuthProvider } from '@/context/AuthContext';
 
-function RootLayoutNav() {
-  return (
-    <>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="auth" />
-      </Stack>
-      <StatusBar style="auto" />
-    </>
-  );
-}
-
 export default function RootLayout() {
   useFrameworkReady();
 
   return (
     <AuthProvider>
-      <RootLayoutNav />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="auth" />
+        <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
+      </Stack>
+      <StatusBar style="auto" />
     </AuthProvider>
   );
 }
