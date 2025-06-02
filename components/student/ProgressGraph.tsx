@@ -1,32 +1,49 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import type { Quest, QuestProgress } from '@/hooks/useQuests';
 
-export default function ProgressGraph() {
-  // Simulated data for the graph
-  const monthlyProgress = [
-    { month: 'Jan', progress: 65 },
-    { month: 'Feb', progress: 72 },
-    { month: 'Mar', progress: 68 },
-    { month: 'Apr', progress: 78 },
-    { month: 'May', progress: 85 },
-    { month: 'Jun', progress: 82 },
-  ];
-  
-  const strandProgress = [
-    { strand: 'Personal Health', progress: 82, color: '#2563EB' },
-    { strand: 'Social Health', progress: 65, color: '#059669' },
-    { strand: 'Community Health', progress: 48, color: '#F97316' },
-    { strand: 'Movement Skills', progress: 76, color: '#8B5CF6' },
-    { strand: 'Physical Activity', progress: 89, color: '#EC4899' },
-  ];
-  
-  const questProgress = [
-    { quest: 'Healthy Eating', completed: true, date: '2 weeks ago' },
-    { quest: 'Active Play', completed: true, date: '1 month ago' },
-    { quest: 'Water Safety', completed: false, progress: 67 },
-    { quest: 'Team Games', completed: false, progress: 25 },
-    { quest: 'Personal Safety', completed: true, date: '3 weeks ago' },
-  ];
+type ProgressGraphProps = {
+  questProgress: QuestProgress[];
+  quests: Quest[];
+};
+
+export default function ProgressGraph({ questProgress, quests }: ProgressGraphProps) {
+  // Calculate monthly progress
+  const monthlyProgress = Array.from({ length: 6 }, (_, i) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - i);
+    const month = date.toLocaleString('default', { month: 'short' });
+    
+    const monthProgress = questProgress.filter(qp => {
+      const progressDate = new Date(qp.updated_at);
+      return progressDate.getMonth() === date.getMonth() &&
+             progressDate.getFullYear() === date.getFullYear();
+    });
+    
+    const avgProgress = monthProgress.length > 0
+      ? monthProgress.reduce((sum, qp) => sum + qp.progress, 0) / monthProgress.length
+      : 0;
+    
+    return { month, progress: Math.round(avgProgress) };
+  }).reverse();
+
+  // Calculate progress by topic
+  const topicProgress = quests.reduce((acc, quest) => {
+    const progress = questProgress.find(qp => qp.quest_id === quest.id);
+    if (!acc[quest.title]) {
+      acc[quest.title] = {
+        completed: 0,
+        total: 0,
+        progress: 0,
+      };
+    }
+    acc[quest.title].total++;
+    if (progress?.status === 'completed') {
+      acc[quest.title].completed++;
+    }
+    acc[quest.title].progress = (acc[quest.title].completed / acc[quest.title].total) * 100;
+    return acc;
+  }, {} as Record<string, { completed: number; total: number; progress: number }>);
 
   return (
     <ScrollView style={styles.container}>
@@ -56,50 +73,24 @@ export default function ProgressGraph() {
       </View>
       
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Progress by Strand</Text>
-        {strandProgress.map((data, index) => (
-          <View key={index} style={styles.strandContainer}>
-            <View style={styles.strandHeader}>
-              <Text style={styles.strandName}>{data.strand}</Text>
-              <Text style={styles.strandValue}>{data.progress}%</Text>
+        <Text style={styles.sectionTitle}>Progress by Topic</Text>
+        {Object.entries(topicProgress).map(([topic, data], index) => (
+          <View key={topic} style={styles.topicContainer}>
+            <View style={styles.topicHeader}>
+              <Text style={styles.topicName}>{topic}</Text>
+              <Text style={styles.topicValue}>{Math.round(data.progress)}%</Text>
             </View>
-            <View style={styles.strandBar}>
+            <View style={styles.topicBar}>
               <View 
                 style={[
-                  styles.strandProgress, 
-                  { width: `${data.progress}%`, backgroundColor: data.color }
+                  styles.topicProgress, 
+                  { width: `${data.progress}%` }
                 ]} 
               />
             </View>
-          </View>
-        ))}
-      </View>
-      
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quest Completion</Text>
-        {questProgress.map((quest, index) => (
-          <View key={index} style={styles.questContainer}>
-            <View style={styles.questInfo}>
-              <Text style={styles.questName}>{quest.quest}</Text>
-              {quest.completed ? (
-                <Text style={styles.completedText}>Completed {quest.date}</Text>
-              ) : (
-                <View style={styles.questProgressContainer}>
-                  <View style={styles.questProgressBar}>
-                    <View 
-                      style={[styles.questProgressFill, { width: `${quest.progress}%` }]} 
-                    />
-                  </View>
-                  <Text style={styles.questProgressText}>{quest.progress}%</Text>
-                </View>
-              )}
-            </View>
-            <View 
-              style={[
-                styles.questStatus,
-                quest.completed ? styles.questCompleted : styles.questInProgress
-              ]}
-            />
+            <Text style={styles.completionText}>
+              {data.completed} of {data.total} completed
+            </Text>
           </View>
         ))}
       </View>
@@ -174,80 +165,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 4,
   },
-  strandContainer: {
+  topicContainer: {
     marginBottom: 16,
   },
-  strandHeader: {
+  topicHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 4,
   },
-  strandName: {
+  topicName: {
     fontSize: 14,
     fontWeight: '500',
   },
-  strandValue: {
+  topicValue: {
     fontSize: 14,
     fontWeight: 'bold',
   },
-  strandBar: {
+  topicBar: {
     height: 8,
     backgroundColor: '#F1F5F9',
     borderRadius: 4,
     overflow: 'hidden',
-  },
-  strandProgress: {
-    height: '100%',
-  },
-  questContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-  },
-  questInfo: {
-    flex: 1,
-  },
-  questName: {
-    fontSize: 14,
-    fontWeight: '500',
     marginBottom: 4,
   },
-  completedText: {
-    fontSize: 12,
-    color: '#059669',
-  },
-  questProgressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  questProgressBar: {
-    flex: 1,
-    height: 4,
-    backgroundColor: '#F1F5F9',
-    borderRadius: 2,
-    overflow: 'hidden',
-    marginRight: 8,
-  },
-  questProgressFill: {
+  topicProgress: {
     height: '100%',
     backgroundColor: '#2563EB',
   },
-  questProgressText: {
+  completionText: {
     fontSize: 12,
     color: '#64748B',
-  },
-  questStatus: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  questCompleted: {
-    backgroundColor: '#059669',
-  },
-  questInProgress: {
-    backgroundColor: '#2563EB',
   },
 });

@@ -1,76 +1,44 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { Lock } from 'lucide-react-native';
+import type { Badge, StudentBadge } from '@/hooks/useBadges';
 
-export default function BadgeDisplay() {
-  const earnedBadges = [
-    {
-      id: '1',
-      title: 'Nutrition Expert',
-      description: 'Completed all healthy eating quests',
-      image: 'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      dateEarned: '2 weeks ago',
-    },
-    {
-      id: '2',
-      title: 'Activity Master',
-      description: 'Completed 5 movement activities',
-      image: 'https://images.pexels.com/photos/3775566/pexels-photo-3775566.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      dateEarned: '1 month ago',
-    },
-    {
-      id: '3',
-      title: 'Safety Star',
-      description: 'Learned all personal safety skills',
-      image: 'https://images.pexels.com/photos/1796794/pexels-photo-1796794.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      dateEarned: '3 weeks ago',
-    },
-    {
-      id: '4',
-      title: 'Team Player',
-      description: 'Participated in 3 group activities',
-      image: 'https://images.pexels.com/photos/8845654/pexels-photo-8845654.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      dateEarned: '1 week ago',
-    },
-  ];
-  
-  const lockedBadges = [
-    {
-      id: '5',
-      title: 'Water Safety Pro',
-      description: 'Complete all water safety lessons',
-      image: 'https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      requirement: '2/3 lessons completed',
-    },
-    {
-      id: '6',
-      title: 'Fitness Champion',
-      description: 'Log 10 movement activities',
-      image: 'https://images.pexels.com/photos/3076516/pexels-photo-3076516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      requirement: '6/10 activities logged',
-    },
-  ];
+type BadgeDisplayProps = {
+  badges: Badge[];
+  earnedBadges: StudentBadge[];
+};
+
+export default function BadgeDisplay({ badges, earnedBadges }: BadgeDisplayProps) {
+  // Split badges into earned and locked
+  const earnedBadgeIds = earnedBadges.map(sb => sb.badge_id);
+  const earnedBadgesData = badges.filter(badge => earnedBadgeIds.includes(badge.id));
+  const lockedBadges = badges.filter(badge => !earnedBadgeIds.includes(badge.id));
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.badgesContainer}>
         <Text style={styles.sectionTitle}>Earned Badges</Text>
         <View style={styles.badgeGrid}>
-          {earnedBadges.map(badge => (
-            <TouchableOpacity key={badge.id} style={styles.badgeCard}>
-              <Image 
-                source={{ uri: badge.image }} 
-                style={styles.badgeImage}
-              />
-              <View style={styles.badgeContent}>
-                <Text style={styles.badgeTitle}>{badge.title}</Text>
-                <Text style={styles.badgeDescription} numberOfLines={2}>
-                  {badge.description}
-                </Text>
-                <Text style={styles.earnedDate}>Earned {badge.dateEarned}</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {earnedBadgesData.map(badge => {
+            const studentBadge = earnedBadges.find(sb => sb.badge_id === badge.id);
+            return (
+              <TouchableOpacity key={badge.id} style={styles.badgeCard}>
+                <Image 
+                  source={{ uri: badge.image_url || 'https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg' }} 
+                  style={styles.badgeImage}
+                />
+                <View style={styles.badgeContent}>
+                  <Text style={styles.badgeTitle}>{badge.title}</Text>
+                  <Text style={styles.badgeDescription} numberOfLines={2}>
+                    {badge.description}
+                  </Text>
+                  <Text style={styles.earnedDate}>
+                    Earned {new Date(studentBadge?.awarded_at || '').toLocaleDateString()}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
         
         <Text style={styles.sectionTitle}>Badges to Earn</Text>
@@ -79,7 +47,7 @@ export default function BadgeDisplay() {
             <View key={badge.id} style={[styles.badgeCard, styles.lockedBadge]}>
               <View style={styles.lockedImageContainer}>
                 <Image 
-                  source={{ uri: badge.image }} 
+                  source={{ uri: badge.image_url || 'https://images.pexels.com/photos/863988/pexels-photo-863988.jpeg' }} 
                   style={[styles.badgeImage, styles.lockedImage]}
                 />
                 <View style={styles.lockOverlay}>
@@ -91,7 +59,9 @@ export default function BadgeDisplay() {
                 <Text style={styles.badgeDescription} numberOfLines={2}>
                   {badge.description}
                 </Text>
-                <Text style={styles.requirementText}>{badge.requirement}</Text>
+                <Text style={styles.requirementText}>
+                  {badge.points} points required
+                </Text>
               </View>
             </View>
           ))}

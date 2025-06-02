@@ -1,12 +1,25 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Clock, Calendar, Award, ChevronRight, MapPin } from 'lucide-react-native';
+import type { Quest, QuestProgress } from '@/hooks/useQuests';
 
-export default function QuestCard({ quest }) {
-  // Calculate status color
+type QuestCardProps = {
+  quest: Quest;
+  progress?: QuestProgress;
+  onProgress: (questId: string, progress: number) => Promise<void>;
+};
+
+export default function QuestCard({ quest, progress, onProgress }: QuestCardProps) {
+  const handleContinue = async () => {
+    // Simulate progress update (in a real app, this would be based on actual completion)
+    const currentProgress = progress?.progress || 0;
+    const newProgress = Math.min(currentProgress + 20, 100);
+    await onProgress(quest.id, newProgress);
+  };
+
   const getStatusColor = () => {
-    if (quest.status === 'completed') return '#059669';
-    if (quest.status === 'active') return '#2563EB';
+    if (progress?.status === 'completed') return '#059669';
+    if (progress?.status === 'in_progress') return '#2563EB';
     return '#64748B';
   };
 
@@ -14,19 +27,19 @@ export default function QuestCard({ quest }) {
     <TouchableOpacity style={styles.container}>
       <View style={styles.header}>
         <Image 
-          source={{ uri: quest.image }} 
+          source={{ uri: quest.image_url || 'https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg' }} 
           style={styles.questImage}
         />
         <View 
           style={[
             styles.statusBadge,
-            { backgroundColor: getStatusColor() + '20' } // Adding transparency
+            { backgroundColor: getStatusColor() + '20' }
           ]}
         >
           <Text style={[styles.statusText, { color: getStatusColor() }]}>
-            {quest.status === 'completed' ? 'Completed' : 
-             quest.status === 'active' ? 'Active' : 
-             'Coming Soon'}
+            {progress?.status === 'completed' ? 'Completed' : 
+             progress?.status === 'in_progress' ? 'In Progress' : 
+             'Not Started'}
           </Text>
         </View>
       </View>
@@ -37,54 +50,62 @@ export default function QuestCard({ quest }) {
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Calendar size={14} color="#64748B" />
-            <Text style={styles.infoText}>{quest.dueDate}</Text>
+            <Text style={styles.infoText}>
+              {new Date(quest.created_at).toLocaleDateString()}
+            </Text>
           </View>
           <View style={styles.infoItem}>
             <Clock size={14} color="#64748B" />
-            <Text style={styles.infoText}>{quest.duration}</Text>
+            <Text style={styles.infoText}>{quest.duration || 'Flexible'}</Text>
           </View>
-          {quest.points > 0 && (
-            <View style={styles.infoItem}>
-              <Award size={14} color="#F97316" />
-              <Text style={[styles.infoText, styles.pointsText]}>{quest.points} pts</Text>
-            </View>
-          )}
+          <View style={styles.infoItem}>
+            <Award size={14} color="#F97316" />
+            <Text style={[styles.infoText, styles.pointsText]}>{quest.points} pts</Text>
+          </View>
         </View>
         
-        {quest.status === 'active' && (
+        {progress?.status === 'in_progress' && (
           <View style={styles.progressContainer}>
             <View style={styles.progressBar}>
               <View 
-                style={[styles.progressFill, { width: `${quest.progress}%` }]} 
+                style={[styles.progressFill, { width: `${progress.progress}%` }]} 
               />
             </View>
-            <Text style={styles.progressText}>{quest.progress}% complete</Text>
+            <Text style={styles.progressText}>{progress.progress}% complete</Text>
           </View>
         )}
         
-        {quest.status === 'active' && (
-          <View style={styles.currentActivity}>
+        {quest.description && (
+          <View style={styles.descriptionContainer}>
             <MapPin size={14} color="#2563EB" />
-            <Text style={styles.currentActivityText}>
-              Current: {quest.currentActivity}
+            <Text style={styles.descriptionText}>
+              {quest.description}
             </Text>
           </View>
         )}
       </View>
       
       <View style={styles.footer}>
-        {quest.status === 'completed' ? (
+        {progress?.status === 'completed' ? (
           <View style={styles.completedContainer}>
             <Award size={16} color="#059669" />
             <Text style={styles.completedText}>Earned {quest.points} points</Text>
           </View>
-        ) : quest.status === 'active' ? (
-          <TouchableOpacity style={styles.continueButton}>
+        ) : progress?.status === 'in_progress' ? (
+          <TouchableOpacity 
+            style={styles.continueButton}
+            onPress={handleContinue}
+          >
             <Text style={styles.continueText}>Continue Quest</Text>
             <ChevronRight size={16} color="white" />
           </TouchableOpacity>
         ) : (
-          <Text style={styles.lockedText}>Unlocks {quest.unlocksOn}</Text>
+          <TouchableOpacity 
+            style={styles.startButton}
+            onPress={() => onProgress(quest.id, 0)}
+          >
+            <Text style={styles.startText}>Start Quest</Text>
+          </TouchableOpacity>
         )}
       </View>
     </TouchableOpacity>
@@ -167,15 +188,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
   },
-  currentActivity: {
+  descriptionContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#EFF6FF',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 4,
   },
-  currentActivityText: {
+  descriptionText: {
+    flex: 1,
     fontSize: 12,
     color: '#2563EB',
     marginLeft: 6,
@@ -209,9 +231,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginRight: 4,
   },
-  lockedText: {
-    textAlign: 'center',
-    color: '#64748B',
-    fontStyle: 'italic',
+  startButton: {
+    backgroundColor: '#F1F5F9',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  startText: {
+    color: '#2563EB',
+    fontWeight: '500',
   },
 });
