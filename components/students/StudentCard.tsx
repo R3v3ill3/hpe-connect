@@ -2,17 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Award, ChevronRight } from 'lucide-react-native';
 import type { Profile } from '@/hooks/useProfile';
+import { useStudentProgress } from '@/hooks/useStudentProgress';
 
 type StudentCardProps = {
   student: Profile;
 };
 
 export default function StudentCard({ student }: StudentCardProps) {
-  // These would ideally come from actual progress data
-  const progressPercentage = Math.floor(Math.random() * 40) + 60; // 60-100%
-  const completedQuests = Math.floor(Math.random() * 5) + 5; // 5-10
-  const currentQuests = Math.floor(Math.random() * 3) + 1; // 1-3
-  const badges = Math.floor(Math.random() * 4) + 2; // 2-5
+  const { progress, loading } = useStudentProgress(student.id);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <TouchableOpacity style={styles.container}>
@@ -34,16 +39,18 @@ export default function StudentCard({ student }: StudentCardProps) {
       <View style={styles.progressSection}>
         <View style={styles.progressHeader}>
           <Text style={styles.progressTitle}>Learning Progress</Text>
-          <Text style={styles.progressPercentage}>{progressPercentage}%</Text>
+          <Text style={styles.progressPercentage}>
+            {progress?.average_completion_rate || 0}%
+          </Text>
         </View>
         
         <View style={styles.progressBar}>
           <View 
             style={[
               styles.progressFill, 
-              { width: `${progressPercentage}%` },
-              progressPercentage < 60 ? styles.lowProgress : 
-              progressPercentage < 80 ? styles.mediumProgress : 
+              { width: `${progress?.average_completion_rate || 0}%` },
+              (progress?.average_completion_rate || 0) < 60 ? styles.lowProgress : 
+              (progress?.average_completion_rate || 0) < 80 ? styles.mediumProgress : 
               styles.highProgress
             ]} 
           />
@@ -52,21 +59,21 @@ export default function StudentCard({ student }: StudentCardProps) {
       
       <View style={styles.statsRow}>
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{completedQuests}</Text>
+          <Text style={styles.statValue}>{progress?.completed_quests || 0}</Text>
           <Text style={styles.statLabel}>Completed</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
-          <Text style={styles.statValue}>{currentQuests}</Text>
+          <Text style={styles.statValue}>{progress?.current_quests || 0}</Text>
           <Text style={styles.statLabel}>In Progress</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statItem}>
           <View style={styles.badgeContainer}>
             <Award size={16} color="#F97316" />
-            <Text style={styles.statValue}>{badges}</Text>
+            <Text style={styles.statValue}>{progress?.total_points || 0}</Text>
           </View>
-          <Text style={styles.statLabel}>Badges</Text>
+          <Text style={styles.statLabel}>Points</Text>
         </View>
       </View>
       
