@@ -1,24 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Switch } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Switch, ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Settings, User, Book, Award, Bell, CloudOff, Shield, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
+import { useAuth } from '@/context/AuthContext';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function ProfileScreen() {
+  const router = useRouter();
+  const { signOut } = useAuth();
+  const { profile, loading, error, updateProfile } = useProfile();
   const [offlineMode, setOfflineMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.replace('/auth/sign-in');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading profile: {error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={() => router.reload()}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerSection}>
         <Image 
-          source={{ uri: 'https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
+          source={{ 
+            uri: profile?.avatar_url || 'https://images.pexels.com/photos/3184644/pexels-photo-3184644.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+          }}
           style={styles.profileImage}
         />
-        <Text style={styles.userName}>Sarah Johnson</Text>
-        <Text style={styles.userRole}>Year 2 Health & PE Teacher</Text>
-        <Text style={styles.userSchool}>Westfield Primary School</Text>
+        <Text style={styles.userName}>{profile?.full_name || 'Update Your Profile'}</Text>
+        <Text style={styles.userRole}>
+          {profile?.role === 'teacher' ? 'Teacher' : 'Student'}
+          {profile?.year_level ? ` - Year ${profile.year_level}` : ''}
+        </Text>
+        <Text style={styles.userSchool}>{profile?.school || 'Add Your School'}</Text>
         
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity 
+          style={styles.editButton}
+          onPress={() => router.push('/profile/edit')}
+        >
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -42,18 +84,18 @@ export default function ProfileScreen() {
       
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Account</Text>
-        <View style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem}>
           <User size={20} color="#2563EB" style={styles.menuIcon} />
           <Text style={styles.menuLabel}>Personal Information</Text>
-        </View>
-        <View style={styles.menuItem}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
           <Book size={20} color="#059669" style={styles.menuIcon} />
           <Text style={styles.menuLabel}>My Curriculum</Text>
-        </View>
-        <View style={styles.menuItem}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
           <Award size={20} color="#F97316" style={styles.menuIcon} />
           <Text style={styles.menuLabel}>Achievements</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       
       <View style={styles.sectionContainer}>
@@ -98,17 +140,20 @@ export default function ProfileScreen() {
       
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Support</Text>
-        <View style={styles.menuItem}>
+        <TouchableOpacity style={styles.menuItem}>
           <HelpCircle size={20} color="#2563EB" style={styles.menuIcon} />
           <Text style={styles.menuLabel}>Help & Documentation</Text>
-        </View>
-        <View style={styles.menuItem}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
           <Shield size={20} color="#059669" style={styles.menuIcon} />
           <Text style={styles.menuLabel}>Privacy & Data</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity 
+        style={styles.logoutButton}
+        onPress={handleSignOut}
+      >
         <LogOut size={20} color="#DC2626" />
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
@@ -122,6 +167,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 20,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: '#2563EB',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
   },
   headerSection: {
     backgroundColor: 'white',
