@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
+import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { supabase } from '@/lib/supabase';
 
@@ -68,7 +69,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
-    await SecureStore.deleteItemAsync('supabase-auth');
+    
+    // Only try to clear secure storage on native platforms
+    if (Platform.OS !== 'web') {
+      try {
+        await SecureStore.deleteItemAsync('supabase-auth');
+      } catch (e) {
+        // Ignore secure store errors
+        console.warn('Error clearing secure store:', e);
+      }
+    }
   };
 
   return (
