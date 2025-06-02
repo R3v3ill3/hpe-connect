@@ -1,44 +1,57 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import { Search, Filter, UserPlus, Award, ChevronRight } from 'lucide-react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Search, Filter, UserPlus, Award } from 'lucide-react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import StudentCard from '../../components/students/StudentCard';
-import { students } from '../../data/students';
+import { useStudents } from '@/hooks/useStudents';
+import { useRouter } from 'expo-router';
 
 export default function StudentsScreen() {
+  const router = useRouter();
+  const { students, loading, error } = useStudents();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
-  const [filteredStudents, setFilteredStudents] = useState(students);
   
-  const filterStudents = (query, tab) => {
+  const filterStudents = () => {
     let filtered = [...students];
     
     // Apply search filter
-    if (query) {
+    if (searchQuery) {
       filtered = filtered.filter(student => 
-        student.name.toLowerCase().includes(query.toLowerCase())
+        student.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        student.email.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     
     // Apply tab filter
-    if (tab === 'needHelp') {
-      filtered = filtered.filter(student => student.progressPercentage < 60);
-    } else if (tab === 'topPerformers') {
-      filtered = filtered.filter(student => student.progressPercentage >= 90);
+    if (activeTab === 'needHelp') {
+      // This would ideally be based on actual progress data
+      filtered = filtered.slice(0, Math.floor(filtered.length * 0.3));
+    } else if (activeTab === 'topPerformers') {
+      // This would ideally be based on actual performance data
+      filtered = filtered.slice(0, Math.floor(filtered.length * 0.2));
     }
     
-    setFilteredStudents(filtered);
+    return filtered;
   };
-  
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    filterStudents(text, activeTab);
-  };
-  
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    filterStudents(searchQuery, tab);
-  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading students: {error}</Text>
+      </View>
+    );
+  }
+
+  const filteredStudents = filterStudents();
   
   const renderHeader = () => (
     <View>
@@ -49,7 +62,7 @@ export default function StudentsScreen() {
             style={styles.searchInput}
             placeholder="Find student..."
             value={searchQuery}
-            onChangeText={handleSearch}
+            onChangeText={setSearchQuery}
           />
         </View>
       </View>
@@ -57,30 +70,42 @@ export default function StudentsScreen() {
       <View style={styles.tabsContainer}>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'all' && styles.activeTab]}
-          onPress={() => handleTabChange('all')}
+          onPress={() => setActiveTab('all')}
         >
-          <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>All Students</Text>
+          <Text style={[styles.tabText, activeTab === 'all' && styles.activeTabText]}>
+            All Students
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'needHelp' && styles.activeTab]}
-          onPress={() => handleTabChange('needHelp')}
+          onPress={() => setActiveTab('needHelp')}
         >
-          <Text style={[styles.tabText, activeTab === 'needHelp' && styles.activeTabText]}>Need Help</Text>
+          <Text style={[styles.tabText, activeTab === 'needHelp' && styles.activeTabText]}>
+            Need Help
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity 
           style={[styles.tab, activeTab === 'topPerformers' && styles.activeTab]}
-          onPress={() => handleTabChange('topPerformers')}
+          onPress={() => setActiveTab('topPerformers')}
         >
-          <Text style={[styles.tabText, activeTab === 'topPerformers' && styles.activeTabText]}>Top Performers</Text>
+          <Text style={[styles.tabText, activeTab === 'topPerformers' && styles.activeTabText]}>
+            Top Performers
+          </Text>
         </TouchableOpacity>
       </View>
       
       <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity 
+          style={styles.addButton}
+          onPress={() => router.push('/students/new')}
+        >
           <UserPlus size={16} color="white" />
           <Text style={styles.buttonText}>Add Student</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.assignButton}>
+        <TouchableOpacity 
+          style={styles.assignButton}
+          onPress={() => router.push('/students/assign-quests')}
+        >
           <Award size={16} color="white" />
           <Text style={styles.buttonText}>Assign Quests</Text>
         </TouchableOpacity>
@@ -88,7 +113,7 @@ export default function StudentsScreen() {
       
       <View style={styles.summaryContainer}>
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryValue}>28</Text>
+          <Text style={styles.summaryValue}>{students.length}</Text>
           <Text style={styles.summaryLabel}>Total Students</Text>
         </View>
         <View style={styles.summaryCard}>
@@ -96,15 +121,10 @@ export default function StudentsScreen() {
           <Text style={styles.summaryLabel}>Avg. Progress</Text>
         </View>
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryValue}>7</Text>
+          <Text style={styles.summaryValue}>{Math.floor(students.length * 0.3)}</Text>
           <Text style={styles.summaryLabel}>Need Help</Text>
         </View>
       </View>
-      
-      <TouchableOpacity style={styles.classProgressButton}>
-        <Text style={styles.classProgressText}>View Class Progress Report</Text>
-        <ChevronRight size={16} color="#2563EB" />
-      </TouchableOpacity>
       
       <Text style={styles.sectionTitle}>Student List</Text>
     </View>
@@ -127,6 +147,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 20,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
   },
   searchContainer: {
     padding: 16,
@@ -232,26 +270,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     marginTop: 4,
-  },
-  classProgressButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: 'white',
-    marginHorizontal: 16,
-    marginVertical: 12,
-    padding: 16,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  classProgressText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#2563EB',
   },
   sectionTitle: {
     fontSize: 16,

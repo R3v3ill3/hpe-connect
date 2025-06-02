@@ -26,39 +26,46 @@ export function useProfile() {
       return;
     }
 
-    async function fetchProfile() {
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-
-        if (error) throw error;
-        setProfile(data);
-      } catch (e) {
-        setError(e instanceof Error ? e.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    }
-
     fetchProfile();
   }, [session]);
 
-  const updateProfile = async (updates: Partial<Profile>) => {
+  async function fetchProfile() {
+    if (!session?.user) return;
+
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
-        .update(updates)
-        .eq('id', session?.user?.id);
+        .select('*')
+        .eq('id', session.user.id)
+        .maybeSingle();
 
       if (error) throw error;
-      setProfile(prev => prev ? { ...prev, ...updates } : null);
+      setProfile(data);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const updateProfile = async (updates: Partial<Profile>) => {
+    if (!session?.user?.id) throw new Error('No user logged in');
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', session.user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+      return data;
     } catch (e) {
       throw e;
     }
   };
 
-  return { profile, loading, error, updateProfile };
+  return { profile, loading, error, updateProfile, refreshProfile: fetchProfile };
 }
