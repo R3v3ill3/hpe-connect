@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { Filter, Search, CirclePlus as PlusCircle, Zap } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 import LessonCard from '../../components/lessons/LessonCard';
 import FilterModal from '../../components/lessons/FilterModal';
-import { lessonPlans } from '../../data/lessonPlans';
+import { useLessons } from '@/hooks/useLessons';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function LessonsScreen() {
+  const router = useRouter();
+  const { lessons, loading, error, refreshLessons } = useLessons();
+  const { profile } = useProfile();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterVisible, setFilterVisible] = useState(false);
-  const [filteredLessons, setFilteredLessons] = useState(lessonPlans);
+  const [filteredLessons, setFilteredLessons] = useState(lessons);
   const [activeFilters, setActiveFilters] = useState({
     yearLevel: [],
     strand: [],
     topic: []
   });
 
-  const handleSearch = (text) => {
+  const handleSearch = (text: string) => {
     setSearchQuery(text);
     if (text.trim() === '') {
-      setFilteredLessons(lessonPlans);
+      setFilteredLessons(lessons);
       return;
     }
     
-    const filtered = lessonPlans.filter(lesson => 
+    const filtered = lessons.filter(lesson => 
       lesson.title.toLowerCase().includes(text.toLowerCase()) ||
       lesson.strand.toLowerCase().includes(text.toLowerCase()) ||
       lesson.topic.toLowerCase().includes(text.toLowerCase())
@@ -30,13 +35,13 @@ export default function LessonsScreen() {
     setFilteredLessons(filtered);
   };
 
-  const applyFilters = (filters) => {
+  const applyFilters = (filters: typeof activeFilters) => {
     setActiveFilters(filters);
     
-    let filtered = [...lessonPlans];
+    let filtered = [...lessons];
     
     if (filters.yearLevel.length > 0) {
-      filtered = filtered.filter(lesson => filters.yearLevel.includes(lesson.yearLevel));
+      filtered = filtered.filter(lesson => filters.yearLevel.includes(lesson.year_level));
     }
     
     if (filters.strand.length > 0) {
@@ -50,6 +55,28 @@ export default function LessonsScreen() {
     setFilteredLessons(filtered);
     setFilterVisible(false);
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading lessons: {error}</Text>
+        <TouchableOpacity 
+          style={styles.retryButton}
+          onPress={refreshLessons}
+        >
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -71,16 +98,24 @@ export default function LessonsScreen() {
         </TouchableOpacity>
       </View>
       
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.newLessonButton}>
-          <PlusCircle size={16} color="white" />
-          <Text style={styles.buttonText}>New Lesson</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.generateButton}>
-          <Zap size={16} color="white" />
-          <Text style={styles.buttonText}>Generate Plan</Text>
-        </TouchableOpacity>
-      </View>
+      {profile?.role === 'teacher' && (
+        <View style={styles.actionButtons}>
+          <TouchableOpacity 
+            style={styles.newLessonButton}
+            onPress={() => router.push('/lessons/new')}
+          >
+            <PlusCircle size={16} color="white" />
+            <Text style={styles.buttonText}>New Lesson</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.generateButton}
+            onPress={() => router.push('/lessons/generate')}
+          >
+            <Zap size={16} color="white" />
+            <Text style={styles.buttonText}>Generate Plan</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       
       {Object.values(activeFilters).some(arr => arr.length > 0) && (
         <View style={styles.activeFiltersContainer}>
@@ -105,7 +140,7 @@ export default function LessonsScreen() {
           <TouchableOpacity 
             onPress={() => {
               setActiveFilters({yearLevel: [], strand: [], topic: []});
-              setFilteredLessons(lessonPlans);
+              setFilteredLessons(lessons);
             }}
           >
             <Text style={styles.clearFiltersText}>Clear All</Text>
@@ -116,7 +151,13 @@ export default function LessonsScreen() {
       <ScrollView style={styles.lessonsList}>
         {filteredLessons.length > 0 ? (
           filteredLessons.map(lesson => (
-            <LessonCard key={lesson.id} lesson={lesson} />
+            <LessonCard 
+              key={lesson.id} 
+              lesson={lesson}
+              isTeacher={profile?.role === 'teacher'}
+              onEdit={() => router.push(`/lessons/${lesson.id}/edit`)}
+              onDelete={refreshLessons}
+            />
           ))
         ) : (
           <View style={styles.noResultsContainer}>
@@ -125,7 +166,7 @@ export default function LessonsScreen() {
               style={styles.clearSearchButton}
               onPress={() => {
                 setSearchQuery('');
-                setFilteredLessons(lessonPlans);
+                setFilteredLessons(lessons);
               }}
             >
               <Text style={styles.clearSearchText}>Clear Search</Text>
@@ -148,6 +189,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 20,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: '#2563EB',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '500',
   },
   searchContainer: {
     flexDirection: 'row',

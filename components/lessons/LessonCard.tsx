@@ -1,8 +1,44 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { FileText, Clock, Calendar, Tag, ChevronRight } from 'lucide-react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { FileText, Clock, Calendar, ChevronRight } from 'lucide-react-native';
+import { supabase } from '@/lib/supabase';
+import type { Lesson } from '@/hooks/useLessons';
 
-export default function LessonCard({ lesson }) {
+type LessonCardProps = {
+  lesson: Lesson;
+  isTeacher: boolean;
+  onEdit: () => void;
+  onDelete: () => void;
+};
+
+export default function LessonCard({ lesson, isTeacher, onEdit, onDelete }: LessonCardProps) {
+  const handleDelete = async () => {
+    Alert.alert(
+      'Delete Lesson',
+      'Are you sure you want to delete this lesson? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const { error } = await supabase
+                .from('lessons')
+                .delete()
+                .eq('id', lesson.id);
+
+              if (error) throw error;
+              onDelete();
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete lesson');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.header}>
@@ -19,31 +55,31 @@ export default function LessonCard({ lesson }) {
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Calendar size={14} color="#64748B" />
-            <Text style={styles.infoText}>Year {lesson.yearLevel}</Text>
+            <Text style={styles.infoText}>Year {lesson.year_level}</Text>
           </View>
           <View style={styles.infoItem}>
             <Clock size={14} color="#64748B" />
-            <Text style={styles.infoText}>{lesson.duration}</Text>
+            <Text style={styles.infoText}>{lesson.duration || 'Not set'}</Text>
           </View>
           <View style={styles.infoItem}>
             <FileText size={14} color="#64748B" />
-            <Text style={styles.infoText}>{lesson.activities} activities</Text>
+            <Text style={styles.infoText}>
+              {lesson.activities ? Object.keys(lesson.activities).length : 0} activities
+            </Text>
           </View>
         </View>
         
         <Text style={styles.description} numberOfLines={2}>
-          {lesson.description}
+          {lesson.description || 'No description provided'}
         </Text>
         
         <View style={styles.tagsRow}>
           <View style={styles.strandTag}>
             <Text style={styles.strandTagText}>{lesson.strand}</Text>
           </View>
-          {lesson.topics && lesson.topics.map((topic, index) => (
-            <View key={index} style={styles.topicTag}>
-              <Text style={styles.topicTagText}>{topic}</Text>
-            </View>
-          ))}
+          <View style={styles.topicTag}>
+            <Text style={styles.topicTagText}>{lesson.topic}</Text>
+          </View>
         </View>
       </View>
       
@@ -51,9 +87,22 @@ export default function LessonCard({ lesson }) {
         <TouchableOpacity style={styles.viewButton}>
           <Text style={styles.viewButtonText}>View</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.assignButton}>
-          <Text style={styles.assignButtonText}>Assign</Text>
-        </TouchableOpacity>
+        {isTeacher && (
+          <>
+            <TouchableOpacity 
+              style={styles.editButton}
+              onPress={onEdit}
+            >
+              <Text style={styles.editButtonText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.deleteButton}
+              onPress={handleDelete}
+            >
+              <Text style={styles.deleteButtonText}>Delete</Text>
+            </TouchableOpacity>
+          </>
+        )}
         <TouchableOpacity style={styles.moreButton}>
           <ChevronRight size={18} color="#64748B" />
         </TouchableOpacity>
@@ -163,17 +212,26 @@ const styles = StyleSheet.create({
     color: '#2563EB',
     fontWeight: '500',
   },
-  assignButton: {
+  editButton: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: 8,
     borderLeftWidth: 1,
     borderLeftColor: '#F1F5F9',
-    borderRightWidth: 1,
-    borderRightColor: '#F1F5F9',
   },
-  assignButtonText: {
+  editButtonText: {
     color: '#059669',
+    fontWeight: '500',
+  },
+  deleteButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderLeftWidth: 1,
+    borderLeftColor: '#F1F5F9',
+  },
+  deleteButtonText: {
+    color: '#DC2626',
     fontWeight: '500',
   },
   moreButton: {
