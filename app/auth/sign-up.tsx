@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
-import { UserPlus } from 'lucide-react-native';
+import { UserPlus, ArrowLeft } from 'lucide-react-native';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -20,7 +20,11 @@ export default function SignUpScreen() {
       await signUp(email, password, role);
       router.replace('/(tabs)');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      if (err instanceof Error && err.message.includes('already registered')) {
+        setError('This email is already registered. Please sign in instead.');
+      } else {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -29,8 +33,14 @@ export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <ArrowLeft size={24} color="#2563EB" />
+        </TouchableOpacity>
         <Image 
-          source={{ uri: 'https://images.pexels.com/photos/256467/pexels-photo-256467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
+          source={require('../../assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png')}
           style={styles.logo}
         />
         <Text style={styles.title}>Create Account</Text>
@@ -40,6 +50,14 @@ export default function SignUpScreen() {
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
+          {error.includes('already registered') && (
+            <TouchableOpacity 
+              style={styles.errorButton}
+              onPress={() => router.push('/auth/sign-in')}
+            >
+              <Text style={styles.errorButtonText}>Go to Sign In</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
 
@@ -107,15 +125,6 @@ export default function SignUpScreen() {
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity 
-          style={styles.signInLink}
-          onPress={() => router.push('/auth/sign-in')}
-        >
-          <Text style={styles.signInText}>
-            Already have an account? <Text style={styles.signInTextBold}>Sign In</Text>
-          </Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -131,10 +140,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 40,
   },
+  backButton: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
   logo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
     marginBottom: 20,
   },
   title: {
@@ -156,6 +169,17 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#DC2626',
     fontSize: 14,
+    marginBottom: 8,
+  },
+  errorButton: {
+    backgroundColor: '#DC2626',
+    padding: 8,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  errorButtonText: {
+    color: 'white',
+    fontWeight: '500',
   },
   form: {
     backgroundColor: 'white',
@@ -224,17 +248,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
-  },
-  signInLink: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  signInText: {
-    fontSize: 14,
-    color: '#64748B',
-  },
-  signInTextBold: {
-    color: '#2563EB',
-    fontWeight: '600',
   },
 });

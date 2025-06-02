@@ -29,7 +29,7 @@ export default function SignInScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image 
-          source={{ uri: 'https://images.pexels.com/photos/256467/pexels-photo-256467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }}
+          source={require('../../assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png')}
           style={styles.logo}
         />
         <Text style={styles.title}>Welcome Back</Text>
@@ -101,9 +101,8 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   logo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
     marginBottom: 20,
   },
   title: {
