@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle();
 
       if (existingUser) {
-        throw new Error('user_already_exists');
+        throw new Error('This email is already registered');
       }
 
       // Create auth user
@@ -73,34 +73,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             },
           ]);
 
-        if (profileError) {
-          // If profile creation fails, clean up auth user
-          await supabase.auth.admin.deleteUser(data.user.id);
-          throw profileError;
-        }
+        if (profileError) throw profileError;
       }
     } catch (error) {
       if (error instanceof Error) {
-        if (error.message === 'user_already_exists') {
-          throw new Error('This email is already registered');
-        }
+        throw new Error(error.message);
       }
       throw error;
     }
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    // Only try to clear secure storage on native platforms
-    if (Platform.OS !== 'web') {
-      try {
-        await SecureStore.deleteItemAsync('supabase-auth');
-      } catch (e) {
-        // Ignore secure store errors
-        console.warn('Error clearing secure store:', e);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      // Only try to clear secure storage on native platforms
+      if (Platform.OS !== 'web') {
+        try {
+          await SecureStore.deleteItemAsync('supabase-auth');
+        } catch (e) {
+          // Ignore secure store errors on web
+          console.warn('Error clearing secure store:', e);
+        }
       }
+
+      // Clear session state
+      setSession(null);
+    } catch (error) {
+      throw error;
     }
   };
 
