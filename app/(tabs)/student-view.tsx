@@ -1,14 +1,69 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Trophy, Star, Award, Activity, BookOpen, CircleCheck as CheckCircle, MapPin } from 'lucide-react-native';
 import QuestCard from '../../components/student/QuestCard';
 import BadgeDisplay from '../../components/student/BadgeDisplay';
 import ProgressGraph from '../../components/student/ProgressGraph';
-import { quests } from '../../data/quests';
+import { useQuests } from '@/hooks/useQuests';
+import { useBadges } from '@/hooks/useBadges';
+import { useProfile } from '@/hooks/useProfile';
 
 export default function StudentViewScreen() {
   const [activeTab, setActiveTab] = useState('quests');
-  
+  const { profile, loading: profileLoading } = useProfile();
+  const { 
+    quests, 
+    questProgress, 
+    loading: questsLoading, 
+    error: questsError,
+    updateQuestProgress 
+  } = useQuests();
+  const { 
+    badges, 
+    studentBadges, 
+    loading: badgesLoading, 
+    error: badgesError 
+  } = useBadges();
+
+  const loading = profileLoading || questsLoading || badgesLoading;
+  const error = questsError || badgesError;
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#2563EB" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  // Calculate total points from completed quests and earned badges
+  const totalPoints = studentBadges.reduce((sum, sb) => {
+    const badge = badges.find(b => b.id === sb.badge_id);
+    return sum + (badge?.points || 0);
+  }, 0);
+
+  // Calculate completion stats
+  const completedQuests = questProgress.filter(qp => qp.status === 'completed').length;
+  const inProgressQuests = questProgress.filter(qp => qp.status === 'in_progress').length;
+  const earnedBadges = studentBadges.length;
+
+  // Get current quest (most recently started incomplete quest)
+  const currentQuest = questProgress
+    .filter(qp => qp.status === 'in_progress')
+    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())[0];
+
+  const currentQuestDetails = currentQuest 
+    ? quests.find(q => q.id === currentQuest.quest_id)
+    : null;
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerBanner}>
@@ -17,11 +72,15 @@ export default function StudentViewScreen() {
           style={styles.bannerImage}
         />
         <View style={styles.headerContent}>
-          <Text style={styles.welcomeText}>Hi, Tommy!</Text>
-          <Text style={styles.subText}>Year 2 - Westfield Primary</Text>
+          <Text style={styles.welcomeText}>Hi, {profile?.full_name?.split(' ')[0] || 'Student'}!</Text>
+          <Text style={styles.subText}>
+            Year {profile?.year_level} - {profile?.school || 'Update your school'}
+          </Text>
           
           <View style={styles.progressBadge}>
-            <Text style={styles.progressText}>Level 3 Explorer</Text>
+            <Text style={styles.progressText}>
+              Level {Math.floor(totalPoints / 100) + 1} Explorer
+            </Text>
             <Star size={14} color="#FFB800" />
           </View>
         </View>
@@ -30,41 +89,46 @@ export default function StudentViewScreen() {
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Trophy size={20} color="#F97316" />
-          <Text style={styles.statValue}>420</Text>
+          <Text style={styles.statValue}>{totalPoints}</Text>
           <Text style={styles.statLabel}>Points</Text>
         </View>
         <View style={styles.statCard}>
           <Award size={20} color="#2563EB" />
-          <Text style={styles.statValue}>4</Text>
+          <Text style={styles.statValue}>{earnedBadges}</Text>
           <Text style={styles.statLabel}>Badges</Text>
         </View>
         <View style={styles.statCard}>
           <CheckCircle size={20} color="#059669" />
-          <Text style={styles.statValue}>8</Text>
+          <Text style={styles.statValue}>{completedQuests}</Text>
           <Text style={styles.statLabel}>Completed</Text>
         </View>
       </View>
       
-      <View style={styles.currentQuest}>
-        <View style={styles.questHeader}>
-          <MapPin size={18} color="#2563EB" />
-          <Text style={styles.currentQuestText}>Current Quest</Text>
-        </View>
-        <View style={styles.questContent}>
-          <Text style={styles.questTitle}>Healthy Food Choices</Text>
-          <View style={styles.questProgress}>
-            <View style={styles.progressBar}>
-              <View 
-                style={[styles.progressFill, { width: `${65}%` }]} 
-              />
-            </View>
-            <Text style={styles.progressText}>65% complete</Text>
+      {currentQuestDetails && (
+        <View style={styles.currentQuest}>
+          <View style={styles.questHeader}>
+            <MapPin size={18} color="#2563EB" />
+            <Text style={styles.currentQuestText}>Current Quest</Text>
           </View>
-          <TouchableOpacity style={styles.continueButton}>
-            <Text style={styles.continueText}>Continue Quest</Text>
-          </TouchableOpacity>
+          <View style={styles.questContent}>
+            <Text style={styles.questTitle}>{currentQuestDetails.title}</Text>
+            <View style={styles.questProgress}>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[styles.progressFill, { width: `${currentQuest.progress}%` }]} 
+                />
+              </View>
+              <Text style={styles.progressText}>{currentQuest.progress}% complete</Text>
+            </View>
+            <TouchableOpacity 
+              style={styles.continueButton}
+              onPress={() => {/* Navigate to quest details */}}
+            >
+              <Text style={styles.continueText}>Continue Quest</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
       
       <View style={styles.tabContainer}>
         <TouchableOpacity 
@@ -99,17 +163,28 @@ export default function StudentViewScreen() {
       {activeTab === 'quests' && (
         <View style={styles.questsContainer}>
           {quests.map(quest => (
-            <QuestCard key={quest.id} quest={quest} />
+            <QuestCard 
+              key={quest.id} 
+              quest={quest}
+              progress={questProgress.find(qp => qp.quest_id === quest.id)}
+              onProgress={updateQuestProgress}
+            />
           ))}
         </View>
       )}
       
       {activeTab === 'badges' && (
-        <BadgeDisplay />
+        <BadgeDisplay 
+          badges={badges}
+          earnedBadges={studentBadges}
+        />
       )}
       
       {activeTab === 'progress' && (
-        <ProgressGraph />
+        <ProgressGraph 
+          questProgress={questProgress}
+          quests={quests}
+        />
       )}
     </ScrollView>
   );
@@ -119,6 +194,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+    padding: 20,
+  },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
   },
   headerBanner: {
     height: 150,
