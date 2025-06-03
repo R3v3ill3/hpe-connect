@@ -15,7 +15,7 @@ export default function TabLayout() {
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontFamily: 'Inter-Medium',
+          fontFamily: 'Inter_500Medium',
         },
         headerShown: true,
         headerStyle: {
@@ -23,7 +23,7 @@ export default function TabLayout() {
         },
         headerTitleStyle: {
           color: 'white',
-          fontFamily: 'Inter-Bold',
+          fontFamily: 'Inter_700Bold',
         },
         headerTintColor: 'white',
         headerTitle: () => (
@@ -33,7 +33,7 @@ export default function TabLayout() {
               style={{ width: 30, height: 30, marginRight: 8 }}
               resizeMode="contain"
             />
-            <Text style={{ color: 'white', fontSize: 18, fontFamily: 'Inter-Bold' }}>
+            <Text style={{ color: 'white', fontSize: 18, fontFamily: 'Inter_700Bold' }}>
               WA HPE Connect
             </Text>
           </View>

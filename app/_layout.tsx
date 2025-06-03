@@ -10,29 +10,29 @@ import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@exp
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const [fontsLoaded, fontError] = useFonts({
-    'Inter-Regular': Inter_400Regular,
-    'Inter-Medium': Inter_500Medium,
-    'Inter-Bold': Inter_700Bold,
+  const [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_700Bold,
   });
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded]);
 
-  if (!fontsLoaded && !fontError) {
+  if (!fontsLoaded) {
     return null;
   }
 
   return (
     <Stack screenOptions={{
       headerTitleStyle: {
-        fontFamily: 'Inter-Bold',
+        fontFamily: 'Inter_700Bold',
       },
       headerBackTitleStyle: {
-        fontFamily: 'Inter-Regular',
+        fontFamily: 'Inter_400Regular',
       },
     }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
