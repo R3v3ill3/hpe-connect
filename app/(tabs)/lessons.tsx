@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 16,
+    fontFamily: 'Inter_400Regular',
   },
   retryButton: {
     backgroundColor: '#2563EB',
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   searchContainer: {
     flexDirection: 'row',
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
+    fontFamily: 'Inter_400Regular',
   },
   filterButton: {
     width: 40,
@@ -278,7 +280,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 6,
   },
   activeFiltersContainer: {
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
   },
   activeFiltersTitle: {
     fontSize: 12,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginRight: 8,
   },
   filterChipContainer: {
@@ -305,11 +307,13 @@ const styles = StyleSheet.create({
   filterChipText: {
     fontSize: 12,
     color: '#0369A1',
+    fontFamily: 'Inter_400Regular',
   },
   clearFiltersText: {
     fontSize: 12,
     color: '#2563EB',
     marginLeft: 8,
+    fontFamily: 'Inter_500Medium',
   },
   lessonsList: {
     flex: 1,
@@ -324,6 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#64748B',
     marginBottom: 16,
+    fontFamily: 'Inter_400Regular',
   },
   clearSearchButton: {
     paddingVertical: 8,
@@ -333,5 +338,6 @@ const styles = StyleSheet.create({
   },
   clearSearchText: {
     color: '#2563EB',
+    fontFamily: 'Inter_500Medium',
   },
 });
