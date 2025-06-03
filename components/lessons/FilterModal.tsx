@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
   content: {
     padding: 16,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 12,
   },
   optionsRow: {
@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
   yearText: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   selectedOptionText: {
     color: 'white',
@@ -268,6 +269,7 @@ const styles = StyleSheet.create({
   strandText: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   topicsContainer: {
     flexDirection: 'row',
@@ -289,6 +291,7 @@ const styles = StyleSheet.create({
   topicText: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   selectedTopicText: {
     color: '#2563EB',
@@ -310,7 +313,7 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     color: '#64748B',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   applyButton: {
     flex: 2,
@@ -321,6 +324,6 @@ const styles = StyleSheet.create({
   },
   applyButtonText: {
     color: 'white',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
 });

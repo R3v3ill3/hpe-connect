@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     flex: 1,
   },
   content: {
@@ -162,12 +162,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     marginLeft: 4,
+    fontFamily: 'Inter_400Regular',
   },
   description: {
     fontSize: 14,
     color: '#334155',
     marginBottom: 12,
     lineHeight: 20,
+    fontFamily: 'Inter_400Regular',
   },
   tagsRow: {
     flexDirection: 'row',
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
   strandTagText: {
     fontSize: 12,
     color: '#2563EB',
+    fontFamily: 'Inter_500Medium',
   },
   topicTag: {
     backgroundColor: '#F1F5F9',
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
   topicTagText: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   footer: {
     flexDirection: 'row',
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
   },
   viewButtonText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   editButton: {
     flex: 1,
@@ -221,7 +225,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     color: '#059669',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   deleteButton: {
     flex: 1,
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     color: '#DC2626',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   moreButton: {
     width: 40,
