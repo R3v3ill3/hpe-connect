@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Zap, ChevronLeft, BookOpen, Clock, Layout } from 'lucide-react-native';
+import { Zap, ChevronLeft, BookOpen, Clock, LayoutGrid as Layout } from 'lucide-react-native';
 import { useLessonPlanning } from '@/hooks/useLessonPlanning';
 
 type LessonTemplate = {

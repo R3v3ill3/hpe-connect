@@ -6,6 +6,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 
+// Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
