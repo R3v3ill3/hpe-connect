@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { Trophy, Star, Award, Activity, BookOpen, CheckCircle, MapPin } from 'lucide-react-native';
+import { Trophy, Star, Award, Activity, BookOpen, CircleCheck as CheckCircle, MapPin } from 'lucide-react-native';
 import QuestCard from '../../components/student/QuestCard';
 import BadgeDisplay from '../../components/student/BadgeDisplay';
 import ProgressGraph from '../../components/student/ProgressGraph';

@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     color: '#DC2626',
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'Inter_400Regular',
   },
   searchContainer: {
     padding: 16,
@@ -185,6 +186,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 40,
+    fontFamily: 'Inter_400Regular',
   },
   tabsContainer: {
     flexDirection: 'row',
@@ -207,10 +209,11 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   activeTabText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   actionButtons: {
     flexDirection: 'row',
@@ -239,7 +242,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 6,
   },
   summaryContainer: {
@@ -263,17 +266,18 @@ const styles = StyleSheet.create({
   },
   summaryValue: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     color: '#2563EB',
   },
   summaryLabel: {
     fontSize: 12,
     color: '#64748B',
     marginTop: 4,
+    fontFamily: 'Inter_400Regular',
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginHorizontal: 16,
     marginTop: 16,
     marginBottom: 8,
