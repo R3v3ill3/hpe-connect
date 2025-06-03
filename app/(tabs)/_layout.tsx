@@ -1,12 +1,30 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { SplashScreen } from 'expo-router';
+import { useEffect } from 'react';
+import { Image, View, Text } from 'react-native';
 import { Chrome as Home, BookOpen, User, Users } from 'lucide-react-native';
-import { useAuth } from '@/context/AuthContext';
+
+// Prevent splash screen from auto-hiding
+SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
-  const { session } = useAuth();
+  const [fontsLoaded, fontError] = useFonts({
+    'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf'),
+    'Inter-Medium': require('../../assets/fonts/Inter-Medium.ttf'),
+    'Inter-Bold': require('../../assets/fonts/Inter-Bold.ttf'),
+  });
 
-  if (!session) {
+  // Hide splash screen once fonts are loaded
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  // Return null to keep splash screen visible while fonts load
+  if (!fontsLoaded && !fontError) {
     return null;
   }
 
@@ -21,6 +39,7 @@ export default function TabLayout() {
         },
         tabBarLabelStyle: {
           fontSize: 12,
+          fontFamily: 'Inter-Medium',
         },
         headerShown: true,
         headerStyle: {
@@ -28,8 +47,21 @@ export default function TabLayout() {
         },
         headerTitleStyle: {
           color: 'white',
+          fontFamily: 'Inter-Bold',
         },
         headerTintColor: 'white',
+        headerTitle: () => (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image
+              source={require('../../assets/images/Gemini_Generated_Image_vgqxgzvgqxgzvgqx.png')}
+              style={{ width: 30, height: 30, marginRight: 8 }}
+              resizeMode="contain"
+            />
+            <Text style={{ color: 'white', fontSize: 18, fontFamily: 'Inter-Bold' }}>
+              WA HPE Connect
+            </Text>
+          </View>
+        ),
       }}>
       <Tabs.Screen
         name="index"
