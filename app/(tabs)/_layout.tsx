@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Image, View, Text } from 'react-native';
-import { Chrome as Home, BookOpen, User, Users } from 'lucide-react-native';
+import { Chrome as Home, BookOpen, User, Users, Award } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -65,6 +65,13 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="student-view"
+        options={{
+          title: 'Student Mode',
+          tabBarIcon: ({ color, size }) => <Award color={color} size={size} />,
         }}
       />
     </Tabs>
