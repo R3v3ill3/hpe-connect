@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Inter_700Bold',
   },
   errorContainer: {
     margin: 16,
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#DC2626',
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Inter_400Regular',
   },
   content: {
     padding: 16,
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 12,
   },
   templateGrid: {
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
   templateTitle: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter_500Medium',
     color: '#64748B',
     marginTop: 8,
     textAlign: 'center',
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
   },
   templateDescription: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Inter_400Regular',
     color: '#94A3B8',
     textAlign: 'center',
     marginTop: 4,
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 8,
     color: '#1F2937',
   },
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Inter_400Regular',
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter_500Medium',
     color: '#1F2937',
     marginTop: 8,
     marginBottom: 4,
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   },
   featureDescription: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontFamily: 'Inter_400Regular',
     color: '#64748B',
     textAlign: 'center',
   },
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   generateButtonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 8,
   },
 });
