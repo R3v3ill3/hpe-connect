@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     color: '#DC2626',
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'Inter_400Regular',
   },
   offlineWarning: {
     backgroundColor: '#F97316',
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     marginLeft: 8,
+    fontFamily: 'Inter_400Regular',
   },
   welcomeSection: {
     backgroundColor: 'white',
@@ -188,11 +190,12 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
   welcomeSubtitle: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   quickActions: {
     flexDirection: 'row',
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
   quickActionText: {
     marginTop: 4,
     fontSize: 12,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   reminderCard: {
     backgroundColor: '#FEF2F2',
@@ -225,13 +228,14 @@ const styles = StyleSheet.create({
   },
   reminderTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     color: '#DC2626',
     marginLeft: 8,
   },
   reminderText: {
     fontSize: 14,
     marginBottom: 12,
+    fontFamily: 'Inter_400Regular',
   },
   reminderButton: {
     backgroundColor: 'white',
@@ -242,7 +246,7 @@ const styles = StyleSheet.create({
   },
   reminderButtonText: {
     color: '#DC2626',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     fontSize: 12,
   },
   sectionContainer: {
@@ -265,11 +269,12 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
   seeAllText: {
     color: '#2563EB',
     fontSize: 14,
+    fontFamily: 'Inter_500Medium',
   },
   offlineNotice: {
     padding: 16,
@@ -285,11 +290,12 @@ const styles = StyleSheet.create({
   },
   offlineButtonText: {
     color: '#64748B',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   offlineInfoText: {
     fontSize: 12,
     color: '#94A3B8',
     textAlign: 'center',
+    fontFamily: 'Inter_400Regular',
   },
 });
