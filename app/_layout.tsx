@@ -4,24 +4,36 @@ import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { AuthProvider } from '@/context/AuthContext';
 import { SplashScreen } from 'expo-router';
+import { View, Text, StyleSheet } from 'react-native';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_700Bold,
+  const [fontsLoaded, fontError] = useFonts({
+    'Inter_400Regular': Inter_400Regular,
+    'Inter_500Medium': Inter_500Medium,
+    'Inter_700Bold': Inter_700Bold,
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
+    if (fontsLoaded || fontError) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, fontError]);
 
+  // Show font loading error if any
+  if (fontError) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>Error loading fonts: {fontError.message}</Text>
+        <Text style={styles.errorDetail}>{JSON.stringify(fontError, null, 2)}</Text>
+      </View>
+    );
+  }
+
+  // Return null while fonts are loading
   if (!fontsLoaded) {
     return null;
   }
@@ -52,3 +64,24 @@ export default function RootLayout() {
     </AuthProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#FEF2F2',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#DC2626',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  errorDetail: {
+    fontSize: 14,
+    color: '#7F1D1D',
+    textAlign: 'left',
+  },
+});
