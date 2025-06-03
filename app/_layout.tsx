@@ -6,7 +6,6 @@ import { AuthProvider } from '@/context/AuthContext';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 
-// Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -24,25 +23,22 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-  // Return null to keep splash screen visible while fonts load
   if (!fontsLoaded && !fontError) {
     return null;
   }
 
   return (
     <AuthProvider>
-      <Stack 
-        screenOptions={{
-          headerTitleStyle: {
-            fontFamily: 'Inter-Bold',
-          },
-          headerBackTitleStyle: {
-            fontFamily: 'Inter-Regular',
-          },
-        }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="auth" />
+      <Stack screenOptions={{
+        headerTitleStyle: {
+          fontFamily: 'Inter-Bold',
+        },
+        headerBackTitleStyle: {
+          fontFamily: 'Inter-Regular',
+        },
+      }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
       </Stack>
       <StatusBar style="auto" />
