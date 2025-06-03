@@ -6,7 +6,6 @@ import { AuthProvider } from '@/context/AuthContext';
 import { SplashScreen } from 'expo-router';
 import { View, Text, StyleSheet } from 'react-native';
 import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
-import { NavigationContainer } from '@react-navigation/native';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
@@ -62,12 +61,10 @@ export default function RootLayout() {
   useFrameworkReady();
 
   return (
-    <NavigationContainer independent={true}>
-      <AuthProvider>
-        <RootLayoutNav />
-        <StatusBar style="auto" />
-      </AuthProvider>
-    </NavigationContainer>
+    <AuthProvider>
+      <RootLayoutNav />
+      <StatusBar style="auto" />
+    </AuthProvider>
   );
 }
 
