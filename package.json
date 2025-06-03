@@ -9,6 +9,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
     "@lucide/lab": "^0.1.2",
     "@react-navigation/bottom-tabs": "^6.5.11",
@@ -45,7 +46,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/plugin-transform-template-literals": "^7.23.3",
-    "@babel/runtime": "^7.20.0", 
+    "@babel/runtime": "^7.20.0",
     "@types/react": "~18.2.45",
     "typescript": "^5.1.3"
   }

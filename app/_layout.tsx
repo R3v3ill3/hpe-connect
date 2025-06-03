@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { AuthProvider } from '@/context/AuthContext';
-import { useFonts } from 'expo-font';
+import { useFonts, Inter_400Regular, Inter_500Medium, Inter_700Bold } from '@expo-google-fonts/inter';
 import { SplashScreen } from 'expo-router';
 
 // Prevent splash screen from auto-hiding
@@ -11,9 +11,9 @@ SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const [fontsLoaded, fontError] = useFonts({
-    'Inter-Regular': require('../assets/fonts/Inter-Regular.ttf'),
-    'Inter-Medium': require('../assets/fonts/Inter-Medium.ttf'),
-    'Inter-Bold': require('../assets/fonts/Inter-Bold.ttf'),
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_700Bold
   });
 
   useEffect(() => {
@@ -29,10 +29,10 @@ function RootLayoutNav() {
   return (
     <Stack screenOptions={{
       headerTitleStyle: {
-        fontFamily: 'Inter-Bold',
+        fontFamily: 'Inter_700Bold',
       },
       headerBackTitleStyle: {
-        fontFamily: 'Inter-Regular',
+        fontFamily: 'Inter_400Regular',
       },
     }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
