@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   lessonTitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   lessonDetails: {
     marginLeft: 12,
@@ -117,11 +117,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     marginLeft: 4,
+    fontFamily: 'Inter_400Regular',
   },
   strandText: {
     fontSize: 12,
     color: '#64748B',
     marginBottom: 8,
+    fontFamily: 'Inter_400Regular',
   },
   lessonFooter: {
     flexDirection: 'row',
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   readyStatusText: {
     color: '#059669',

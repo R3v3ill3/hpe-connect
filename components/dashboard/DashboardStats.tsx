@@ -119,17 +119,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#059669',
     marginLeft: 2,
+    fontFamily: 'Inter_500Medium',
   },
   decreaseText: {
     color: '#DC2626',
   },
   statValue: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 2,
   },
   statLabel: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
 });

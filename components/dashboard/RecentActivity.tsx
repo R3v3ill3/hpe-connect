@@ -77,9 +77,11 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 14,
     marginBottom: 2,
+    fontFamily: 'Inter_500Medium',
   },
   activityTime: {
     fontSize: 12,
     color: '#94A3B8',
+    fontFamily: 'Inter_400Regular',
   },
 });
