@@ -107,13 +107,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
     color: '#64748B',
     textAlign: 'center',
+    fontFamily: 'Inter_400Regular',
   },
   errorContainer: {
     backgroundColor: '#FEE2E2',
@@ -124,6 +125,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#DC2626',
     fontSize: 14,
+    fontFamily: 'Inter_400Regular',
   },
   form: {
     backgroundColor: 'white',
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 8,
     color: '#1F2937',
   },
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
+    fontFamily: 'Inter_400Regular',
   },
   signInButton: {
     backgroundColor: '#2563EB',
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
   signInButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 8,
   },
   signUpLink: {
@@ -175,9 +178,10 @@ const styles = StyleSheet.create({
   signUpText: {
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   signUpTextBold: {
     color: '#2563EB',
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
   },
 });
