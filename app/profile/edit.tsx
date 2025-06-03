@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 8,
     color: '#1F2937',
   },
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    fontFamily: 'Inter_400Regular',
   },
   saveButton: {
     backgroundColor: '#2563EB',
@@ -113,6 +114,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
   },
 });

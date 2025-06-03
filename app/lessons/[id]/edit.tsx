@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 8,
     color: '#1F2937',
   },
@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    fontFamily: 'Inter_400Regular',
   },
   textArea: {
     height: 100,
@@ -184,6 +185,6 @@ const styles = StyleSheet.create({
   updateButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
   },
 });

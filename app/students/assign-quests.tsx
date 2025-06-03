@@ -15,7 +15,6 @@ export default function AssignQuestsScreen() {
   const loading = studentsLoading || questsLoading;
 
   const handleAssign = async () => {
-    // This would be implemented to assign the selected quest to selected students
     router.back();
   };
 
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 12,
   },
   studentItem: {
@@ -129,7 +128,7 @@ const styles = StyleSheet.create({
   },
   studentName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   questItem: {
     flexDirection: 'row',
@@ -146,13 +145,13 @@ const styles = StyleSheet.create({
   },
   questTitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 12,
   },
   questPoints: {
     fontSize: 14,
     color: '#F97316',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   assignButton: {
     backgroundColor: '#2563EB',
@@ -166,6 +165,6 @@ const styles = StyleSheet.create({
   assignButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
   },
 });

@@ -21,10 +21,9 @@ export default function NewStudentScreen() {
     try {
       setIsLoading(true);
 
-      // First, create the auth user
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email,
-        password: 'temppass123', // This should be changed by the student on first login
+        password: 'temppass123',
         email_confirm: true,
       });
 
@@ -32,7 +31,6 @@ export default function NewStudentScreen() {
 
       if (!authData.user) throw new Error('Failed to create user');
 
-      // Then create the profile
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
@@ -148,7 +146,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
   content: {
     flex: 1,
@@ -161,7 +159,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginBottom: 8,
     color: '#1F2937',
   },
@@ -172,6 +170,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
+    fontFamily: 'Inter_400Regular',
   },
   createButton: {
     backgroundColor: '#2563EB',
@@ -186,6 +185,6 @@ const styles = StyleSheet.create({
   createButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
   },
 });
