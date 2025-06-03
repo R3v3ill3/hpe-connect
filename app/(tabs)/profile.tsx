@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 16,
+    fontFamily: 'Inter_400Regular',
   },
   retryButton: {
     backgroundColor: '#2563EB',
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   headerSection: {
     backgroundColor: 'white',
@@ -213,18 +214,20 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 4,
   },
   userRole: {
     fontSize: 14,
     color: '#64748B',
     marginBottom: 2,
+    fontFamily: 'Inter_400Regular',
   },
   userSchool: {
     fontSize: 14,
     color: '#64748B',
     marginBottom: 16,
+    fontFamily: 'Inter_400Regular',
   },
   editButton: {
     paddingVertical: 8,
@@ -234,7 +237,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   statsSection: {
     flexDirection: 'row',
@@ -250,13 +253,14 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     color: '#2563EB',
   },
   statLabel: {
     fontSize: 12,
     color: '#64748B',
     marginTop: 4,
+    fontFamily: 'Inter_400Regular',
   },
   statDivider: {
     width: 1,
@@ -276,7 +280,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 16,
   },
   menuItem: {
@@ -291,6 +295,7 @@ const styles = StyleSheet.create({
   },
   menuLabel: {
     fontSize: 16,
+    fontFamily: 'Inter_400Regular',
   },
   toggleItem: {
     flexDirection: 'row',
@@ -317,11 +322,12 @@ const styles = StyleSheet.create({
   logoutText: {
     marginLeft: 8,
     color: '#DC2626',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   versionText: {
     textAlign: 'center',
     color: '#94A3B8',
     marginBottom: 24,
+    fontFamily: 'Inter_400Regular',
   },
 });
