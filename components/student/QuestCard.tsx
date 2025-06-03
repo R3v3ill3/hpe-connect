@@ -11,7 +11,6 @@ type QuestCardProps = {
 
 export default function QuestCard({ quest, progress, onProgress }: QuestCardProps) {
   const handleContinue = async () => {
-    // Simulate progress update (in a real app, this would be based on actual completion)
     const currentProgress = progress?.progress || 0;
     const newProgress = Math.min(currentProgress + 20, 100);
     await onProgress(quest.id, newProgress);
@@ -141,14 +140,14 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   content: {
     padding: 16,
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 8,
   },
   infoRow: {
@@ -164,10 +163,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#64748B',
     marginLeft: 4,
+    fontFamily: 'Inter_400Regular',
   },
   pointsText: {
     color: '#F97316',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   progressContainer: {
     marginBottom: 12,
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   descriptionContainer: {
     flexDirection: 'row',
@@ -201,6 +202,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#2563EB',
     marginLeft: 6,
+    fontFamily: 'Inter_400Regular',
   },
   footer: {
     borderTopWidth: 1,
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
   completedText: {
     color: '#059669',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginLeft: 6,
   },
   continueButton: {
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
   },
   continueText: {
     color: 'white',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
     marginRight: 4,
   },
   startButton: {
@@ -240,6 +242,6 @@ const styles = StyleSheet.create({
   },
   startText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
 });

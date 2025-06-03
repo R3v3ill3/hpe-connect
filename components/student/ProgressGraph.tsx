@@ -8,7 +8,6 @@ type ProgressGraphProps = {
 };
 
 export default function ProgressGraph({ questProgress, quests }: ProgressGraphProps) {
-  // Calculate monthly progress
   const monthlyProgress = Array.from({ length: 6 }, (_, i) => {
     const date = new Date();
     date.setMonth(date.getMonth() - i);
@@ -27,7 +26,6 @@ export default function ProgressGraph({ questProgress, quests }: ProgressGraphPr
     return { month, progress: Math.round(avgProgress) };
   }).reverse();
 
-  // Calculate progress by topic
   const topicProgress = quests.reduce((acc, quest) => {
     const progress = questProgress.find(qp => qp.quest_id === quest.id);
     if (!acc[quest.title]) {
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 16,
   },
   graphContainer: {
@@ -138,6 +136,7 @@ const styles = StyleSheet.create({
   barLabel: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   barWrapper: {
     height: '100%',
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
   },
   barValue: {
     fontSize: 12,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginTop: 4,
   },
   topicContainer: {
@@ -175,11 +174,11 @@ const styles = StyleSheet.create({
   },
   topicName: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   topicValue: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
   },
   topicBar: {
     height: 8,
@@ -195,5 +194,6 @@ const styles = StyleSheet.create({
   completionText: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
 });

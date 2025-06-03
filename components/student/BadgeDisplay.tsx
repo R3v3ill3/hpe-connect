@@ -9,7 +9,6 @@ type BadgeDisplayProps = {
 };
 
 export default function BadgeDisplay({ badges, earnedBadges }: BadgeDisplayProps) {
-  // Split badges into earned and locked
   const earnedBadgeIds = earnedBadges.map(sb => sb.badge_id);
   const earnedBadgesData = badges.filter(badge => earnedBadgeIds.includes(badge.id));
   const lockedBadges = badges.filter(badge => !earnedBadgeIds.includes(badge.id));
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 16,
   },
   badgeGrid: {
@@ -125,22 +124,23 @@ const styles = StyleSheet.create({
   },
   badgeTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 4,
   },
   badgeDescription: {
     fontSize: 14,
     color: '#64748B',
     marginBottom: 8,
+    fontFamily: 'Inter_400Regular',
   },
   earnedDate: {
     fontSize: 12,
     color: '#059669',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   requirementText: {
     fontSize: 12,
     color: '#F97316',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
 });
