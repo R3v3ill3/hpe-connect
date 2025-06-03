@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function ProfileScreen() {
+export default function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
-      <Text style={styles.subtitle}>Your profile information will appear here</Text>
+      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.subtitle}>Your settings will appear here</Text>
     </View>
   );
 }
