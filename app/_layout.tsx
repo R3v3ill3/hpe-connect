@@ -12,9 +12,9 @@ SplashScreen.preventAutoHideAsync();
 
 function RootLayoutNav() {
   const [fontsLoaded, fontError] = useFonts({
-    'Inter_400Regular': Inter_400Regular,
-    'Inter_500Medium': Inter_500Medium,
-    'Inter_700Bold': Inter_700Bold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_700Bold,
   });
 
   useEffect(() => {
