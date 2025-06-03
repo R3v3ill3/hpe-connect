@@ -14,7 +14,7 @@ export default function StudentCard({ student }: StudentCardProps) {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text>Loading...</Text>
+        <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
   }
@@ -104,6 +104,11 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
+  loadingText: {
+    fontFamily: 'Inter_400Regular',
+    textAlign: 'center',
+    padding: 16,
+  },
   header: {
     flexDirection: 'row',
     padding: 16,
@@ -122,12 +127,13 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 2,
   },
   details: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   progressSection: {
     padding: 16,
@@ -141,11 +147,11 @@ const styles = StyleSheet.create({
   },
   progressTitle: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   progressPercentage: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     color: '#2563EB',
   },
   progressBar: {
@@ -179,12 +185,13 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 2,
   },
   statLabel: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   statDivider: {
     width: 1,
@@ -205,7 +212,7 @@ const styles = StyleSheet.create({
   },
   viewButtonText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   assignButton: {
     flex: 1,
@@ -218,7 +225,7 @@ const styles = StyleSheet.create({
   },
   assignButtonText: {
     color: '#059669',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   moreButton: {
     width: 40,
