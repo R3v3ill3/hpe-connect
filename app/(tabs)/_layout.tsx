@@ -1,33 +1,9 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { useFonts } from 'expo-font';
-import { SplashScreen } from 'expo-router';
-import { useEffect } from 'react';
 import { Image, View, Text } from 'react-native';
 import { Chrome as Home, BookOpen, User, Users } from 'lucide-react-native';
 
-// Prevent splash screen from auto-hiding
-SplashScreen.preventAutoHideAsync();
-
 export default function TabLayout() {
-  const [fontsLoaded, fontError] = useFonts({
-    'Inter-Regular': require('../../assets/fonts/Inter-Regular.ttf'),
-    'Inter-Medium': require('../../assets/fonts/Inter-Medium.ttf'),
-    'Inter-Bold': require('../../assets/fonts/Inter-Bold.ttf'),
-  });
-
-  // Hide splash screen once fonts are loaded
-  useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  // Return null to keep splash screen visible while fonts load
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
-
   return (
     <Tabs
       screenOptions={{
