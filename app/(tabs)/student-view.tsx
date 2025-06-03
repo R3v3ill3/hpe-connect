@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { Trophy, Star, Award, Activity, BookOpen, CircleCheck as CheckCircle, MapPin } from 'lucide-react-native';
+import { Trophy, Star, Award, Activity, BookOpen, CheckCircle, MapPin } from 'lucide-react-native';
 import QuestCard from '../../components/student/QuestCard';
 import BadgeDisplay from '../../components/student/BadgeDisplay';
 import ProgressGraph from '../../components/student/ProgressGraph';
@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     color: '#DC2626',
     fontSize: 16,
     textAlign: 'center',
+    fontFamily: 'Inter_400Regular',
   },
   headerBanner: {
     height: 150,
@@ -230,13 +231,14 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     color: 'white',
   },
   subText: {
     fontSize: 14,
     color: 'white',
     marginBottom: 8,
+    fontFamily: 'Inter_400Regular',
   },
   progressBadge: {
     flexDirection: 'row',
@@ -251,6 +253,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     marginRight: 4,
+    fontFamily: 'Inter_500Medium',
   },
   statsRow: {
     flexDirection: 'row',
@@ -266,12 +269,13 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginTop: 4,
   },
   statLabel: {
     fontSize: 12,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   currentQuest: {
     margin: 16,
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
   currentQuestText: {
     marginLeft: 8,
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: 'Inter_500Medium',
     color: '#2563EB',
   },
   questContent: {
@@ -302,7 +306,7 @@ const styles = StyleSheet.create({
   },
   questTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Inter_700Bold',
     marginBottom: 12,
   },
   questProgress: {
@@ -329,7 +333,7 @@ const styles = StyleSheet.create({
   },
   continueText: {
     color: 'white',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   tabContainer: {
     flexDirection: 'row',
@@ -355,10 +359,11 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 14,
     color: '#64748B',
+    fontFamily: 'Inter_400Regular',
   },
   activeTabText: {
     color: '#2563EB',
-    fontWeight: '500',
+    fontFamily: 'Inter_500Medium',
   },
   questsContainer: {
     padding: 16,
