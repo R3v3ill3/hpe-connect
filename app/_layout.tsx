@@ -8,9 +8,7 @@ import { SplashScreen } from 'expo-router';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  useFrameworkReady();
-
+function RootLayoutNav() {
   const [fontsLoaded, fontError] = useFonts({
     'Inter-Regular': Inter_400Regular,
     'Inter-Medium': Inter_500Medium,
@@ -28,19 +26,27 @@ export default function RootLayout() {
   }
 
   return (
+    <Stack screenOptions={{
+      headerTitleStyle: {
+        fontFamily: 'Inter-Bold',
+      },
+      headerBackTitleStyle: {
+        fontFamily: 'Inter-Regular',
+      },
+    }}>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="auth" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  useFrameworkReady();
+
+  return (
     <AuthProvider>
-      <Stack screenOptions={{
-        headerTitleStyle: {
-          fontFamily: 'Inter-Bold',
-        },
-        headerBackTitleStyle: {
-          fontFamily: 'Inter-Regular',
-        },
-      }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="auth" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" options={{ title: 'Oops!' }} />
-      </Stack>
+      <RootLayoutNav />
       <StatusBar style="auto" />
     </AuthProvider>
   );
