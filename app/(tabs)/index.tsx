@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Calendar, Clock, Users, ChartBar as BarChart2, CircleAlert as AlertCircle, CloudOff } from 'lucide-react-native';
+import { Calendar, Clock, Users, BarChart as BarChart2, CircleAlert as AlertCircle, CloudOff } from 'lucide-react-native';
 import DashboardStats from '../../components/dashboard/DashboardStats';
 import RecentActivity from '../../components/dashboard/RecentActivity';
 import UpcomingLessons from '../../components/dashboard/UpcomingLessons';
